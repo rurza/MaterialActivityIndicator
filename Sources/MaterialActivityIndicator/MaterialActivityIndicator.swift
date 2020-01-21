@@ -11,9 +11,9 @@ import UIKit
 @IBDesignable
 public class MaterialActivityIndicatorView: UIView {
     @IBInspectable
-    public var color: UIColor = .red {
+    public var color: UIColor = .gray {
         didSet {
-            indicator.strokeColor = color.cgColor
+            updateIndicatorStrokeColor()
         }
     }
 
@@ -52,6 +52,18 @@ public class MaterialActivityIndicatorView: UIView {
         indicator.strokeStart = 0.0
         indicator.strokeEnd = 0.0
         layer.addSublayer(indicator)
+        isHidden = true
+        backgroundColor = .clear
+    }
+    
+    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        ///used to update layer color when environment did change
+        updateIndicatorStrokeColor()
+    }
+    
+    private func updateIndicatorStrokeColor() {
+        indicator.strokeColor = color.cgColor
     }
 }
 
@@ -74,14 +86,14 @@ extension MaterialActivityIndicatorView {
 extension MaterialActivityIndicatorView {
     public func startAnimating() {
         guard !isAnimating else { return }
-
+        isHidden = false
         animator.addAnimation(to: indicator)
         isAnimating = true
     }
 
     public func stopAnimating() {
         guard isAnimating else { return }
-
+        isHidden = true
         animator.removeAnimation(from: indicator)
         isAnimating = false
     }
