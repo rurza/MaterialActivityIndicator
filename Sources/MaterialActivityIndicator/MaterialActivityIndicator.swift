@@ -59,7 +59,11 @@ public class MaterialActivityIndicatorView: UIView {
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         ///used to update layer color when environment did change
-        updateIndicatorStrokeColor()
+        if #available(iOS 13.0, *) {
+            if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+                updateIndicatorStrokeColor()
+            }
+        }
     }
     
     private func updateIndicatorStrokeColor() {
